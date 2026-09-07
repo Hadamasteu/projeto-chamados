@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{% block title %}Sistema de Suporte de TI{% endblock %}</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>Sistema de Suporte de TI</h1>
+
+      <nav>
+        <a href="/chamados/">Chamados</a>
+      </nav>
+    </header>
+
+    <main>{% block content %} {% endblock %}</main>
+
+    <footer>
+      <p>Sistema de Suporte de TI</p>
+    </footer>
+  </body>
+</html>
