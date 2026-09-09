@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session, selectinload, joinedload
 
 from app.models.chamado import Chamado
 
@@ -43,10 +43,22 @@ class ChamadoRepository:
         chamado_id: int
     ):
 
-        comando = select(Chamado).where(
-            Chamado.id == chamado_id
+        comando = (
+            select(Chamado)
+            .options(joinedload(Chamado.usuario))
+            .where(Chamado.id == chamado_id)
         )
 
         resultado = session.execute(comando)
 
         return resultado.scalar_one_or_none()
+
+    def listar_chamado_por_usuario (self, session, usuario_id):
+        comando = (
+            select(Chamado)
+            .options(joinedload(Chamado.usuario))
+            .where(Chamado.usuario_id == usuario_id)
+        )
+
+        resultado = session.execute(comando)
+        return resultado.scalars().all()

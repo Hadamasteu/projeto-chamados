@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Meus chamados</title>
+  </head>
+
+  <body>
+    <h1>Meus chamados</h1>
+
+    {% if chamados %} {% for chamado in chamados %}
+
+    <div>
+      <h3>Chamado #{{ chamado.id }}</h3>
+
+      <p>{{ chamado.solicitacao }}</p>
+
+      <p>Status: {{ chamado.status }}</p>
+    </div>
+
+    <hr />
+
+    {% endfor %} {% else %}
+
+    <p>Você ainda não possui chamados.</p>
+
+    {% endif %}
+
+    <a href="{{ url_for('dashboard.index') }}"> Voltar para o dashboard </a>
+  </body>
+</html>
