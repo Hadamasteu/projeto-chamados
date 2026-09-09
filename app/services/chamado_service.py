@@ -56,3 +56,19 @@ class ChamadoService:
         return self.chamado_repository.listar(
             session
         )
+
+    def listar_chamados_usuario(self, session, usuario_id):
+        return self.chamado_repository.listar_chamado_por_usuario(
+            session,
+            usuario_id
+        )
+
+    def buscar_chamado(self, session, chamado_id, usuario):
+        chamado = self.chamado_repository.buscar_por_id(session, chamado_id)
+        if not chamado:
+            return None, "nao_encontrado"
+        if usuario.permissao_ti or usuario.permissao_gerente:
+            return chamado, None
+        if chamado.usuario_id == usuario.id:
+            return chamado, None
+        return None, "sem_permissao"

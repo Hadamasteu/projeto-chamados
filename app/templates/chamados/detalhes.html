@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chamado #{{ chamado.id }}</title>
+  </head>
+
+  <body>
+    <h1>Chamado #{{ chamado.id }}</h1>
+
+    <p>
+      <strong>Solicitação:</strong>
+      {{ chamado.solicitacao }}
+    </p>
+
+    <p>
+      <strong>Data:</strong>
+      {{ chamado.data.strftime('%H:%M - %d/%m/%Y') }}
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+      {{ chamado.status }}
+    </p>
+
+    <p>
+      <strong>Usuário:</strong>
+      {{ chamado.usuario.nome_usuario }}
+    </p>
+
+    <p>
+      <strong>Setor:</strong>
+      {{ chamado.usuario.setor }}
+    </p>
+
+    <br />
+
+    <a href="{{ url_for('chamados.listar_chamados') }}">
+      Voltar para chamados
+    </a>
+  </body>
+</html>

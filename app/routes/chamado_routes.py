@@ -16,7 +16,7 @@ chamado_bp = Blueprint(
 )
 
 
-@chamado_bp.route("/")
+@chamado_bp.route("/area-ti")
 @login_required
 @permissao_required("permissao_ti", "permissao_gerente")
 def listar_chamados():
@@ -30,7 +30,7 @@ def listar_chamados():
         )
 
     return render_template(
-        "chamados/lista.html",
+        "chamados/area_ti.html",
         chamados=chamados
     )
 
@@ -59,4 +59,50 @@ def novo_chamado():
 
     return render_template(
         "chamados/novo.html"
+    )
+
+@chamado_bp.route("/meus-chamados")
+@login_required
+def meus_chamados():
+
+    usuario = get_usuario_logado()
+
+    service = ChamadoService()
+
+    with SessionLocal() as session_db:
+
+        chamados = service.listar_chamados_usuario(
+            session_db,
+            usuario.id
+        )
+
+    return render_template(
+        "chamados/meus_chamados.html",
+        chamados=chamados
+    )
+
+@chamado_bp.route("/<int:chamado_id>")
+@login_required
+def visualizar_chamado(chamado_id):
+
+    service = ChamadoService()
+    usuario = get_usuario_logado()
+
+    with SessionLocal() as session_db:
+
+        chamado, erro = service.buscar_chamado(
+            session_db,
+            chamado_id,
+            usuario
+        )
+
+    if erro == "nao_encontrado":
+        return "Chamado não encontrado", 403
+
+    if erro == "sem_permissao":
+        return "Você não tem permissão para visualizar este chamado", 403
+
+    return render_template(
+        "chamados/detalhes.html",
+        chamado=chamado
     )

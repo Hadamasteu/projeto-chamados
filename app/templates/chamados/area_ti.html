@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Área da TI</title>
+  </head>
+
+  <body>
+    <h1>Área da TI</h1>
+
+    {% if chamados %} {% for chamado in chamados %}
+
+    <div>
+      <h3>Chamado #{{ chamado.id }}</h3>
+
+      <p>Solicitação: {{ chamado.solicitacao }}</p>
+
+      <p>Status: {{ chamado.status }}</p>
+
+      <p>Usuário: {{ chamado.usuario.nome_usuario }}</p>
+
+      <a
+        href="{{ url_for('chamados.visualizar_chamado', chamado_id=chamado.id) }}"
+      >
+        Visualizar chamado
+      </a>
+    </div>
+
+    <hr />
+
+    {% endfor %} {% else %}
+
+    <p>Não existem chamados cadastrados.</p>
+
+    {% endif %}
+
+    <a href="{{ url_for('dashboard.index') }}"> Voltar </a>
+  </body>
+</html>
