@@ -104,5 +104,33 @@ def visualizar_chamado(chamado_id):
 
     return render_template(
         "chamados/detalhes.html",
-        chamado=chamado
+        chamado=chamado,
+        usuario=usuario
+    )
+
+@chamado_bp.route("/<int:chamado_id>/status", methods=["POST"])
+@login_required
+@permissao_required("permissao_ti", "permissao_gerente")
+def atualizar_status(chamado_id):
+    novo_status = request.form["status"]
+
+    service = ChamadoService()
+
+    with SessionLocal() as session_db:
+        chamado, erro = service.atualizar_status(
+            session_db,
+            chamado_id,
+            novo_status
+        )
+    if erro == "status_invalido":
+        return "Status inválido", 400
+    
+    if not chamado:
+        return "Chamado não encontrado", 404
+
+    return redirect(
+        url_for(
+            "chamados.visualizar_chamado",
+            chamado_id=chamado.id
+        )
     )

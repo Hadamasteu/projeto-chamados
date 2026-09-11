@@ -62,3 +62,16 @@ class ChamadoRepository:
 
         resultado = session.execute(comando)
         return resultado.scalars().all()
+
+    def atualizar_status(self, session, chamado_id, novo_status):
+        chamado = self.buscar_por_id(session, chamado_id)
+
+        if not chamado:
+            return None
+
+        chamado.status = novo_status
+        session.commit()
+
+        session.refresh(chamado)
+
+        return chamado

@@ -22,7 +22,37 @@
       <strong>Status:</strong>
       {{ chamado.status }}
     </p>
+    {% if usuario.permissao_ti or usuario.permissao_gerente %}
+    <h2>Alterar status</h2>
 
+    <form
+      method="POST"
+      action="{{ url_for('chamados.atualizar_status', chamado_id=chamado.id) }}"
+    >
+      <label for="status">Status:</label>
+
+      <select name="status" id="status">
+
+        <option value="pendente"
+            {% if chamado.status == "pendente" %}selected{% endif %}>
+            Pendente
+        </option>
+
+        <option value="em_andamento"
+            {% if chamado.status == "em_andamento" %}selected{% endif %}>
+            Em andamento
+        </option>
+
+        <option value="resolvido"
+            {% if chamado.status == "resolvido" %}selected{% endif %}>
+            Resolvido
+        </option>
+
+      </select>
+
+      <button type="submit">Atualizar status</button>
+    </form>
+    {% endif %}
     <p>
       <strong>Usuário:</strong>
       {{ chamado.usuario.nome_usuario }}

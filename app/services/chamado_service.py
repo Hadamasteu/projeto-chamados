@@ -72,3 +72,24 @@ class ChamadoService:
         if chamado.usuario_id == usuario.id:
             return chamado, None
         return None, "sem_permissao"
+
+    def atualizar_status(self, session, chamado_id, novo_status):
+        status_permitidos = [
+            "pendente",
+            "em_andamento",
+            "resolvido"
+        ]
+
+        if novo_status not in status_permitidos:
+            return None, "status_invalido"
+
+        chamado = self.chamado_repository.atualizar_status(
+            session,
+            chamado_id,
+            novo_status
+        )
+
+        if not chamado:
+            return None, "nao_encontrado"
+
+        return chamado, None
