@@ -93,3 +93,10 @@ class ChamadoService:
             return None, "nao_encontrado"
 
         return chamado, None
+
+    def atualizar_processos(self, session, chamado_id, novos_processos):
+        return self.chamado_repository.atualizar_processos(
+            session,
+            chamado_id,
+            novos_processos
+        )

@@ -41,9 +41,8 @@ class Chamado(Base):
         nullable=False
     )
 
-    processos: Mapped[str | None] = mapped_column(
-        Text,
-        nullable=True
+    processos: Mapped[list["Processo"]] = relationship(
+        back_populates="chamados"
     )
 
     usuario: Mapped["Usuario"] = relationship(

@@ -134,3 +134,23 @@ def atualizar_status(chamado_id):
             chamado_id=chamado.id
         )
     )
+
+@chamado_bp.route("/<int:chamado_id>/processos", methods=["POST"])
+@login_required
+@permissao_required("permissao_ti", "permissao_gerente")
+def atualizar_processos(chamado_id):
+    novos_processos = request.form["processos"]
+
+    service = ChamadoService()
+
+    with SessionLocal() as session_db:
+        chamado = service.atualizar_processos(
+            session_db,
+            chamado_id,
+            novos_processos
+        )
+
+    if not chamado:
+        return "Chamado não encontrado", 404
+
+    return redirect(url_for("chamados.visualizar_chamado", chamado_id=chamado.id))

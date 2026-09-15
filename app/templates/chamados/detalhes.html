@@ -62,6 +62,19 @@
       <strong>Setor:</strong>
       {{ chamado.usuario.setor }}
     </p>
+    
+
+    {% if usuario.permissao_ti or usuario.permissao_gerente %}
+      <h2>Registrar Processo</h2>
+      <form method="POST"
+      action="{{ url_for('chamados.atualizar_processos', chamado_id = chamado.id) }}">
+        <label for="processos">Processo realizado:</label>
+        <br>
+        <textarea name="processos" id="processos" rows="6" required>{{ chamado.processos or "" }}</textarea>
+        <br>
+        <button type="submit">Registrar processo</button>
+      </form>
+    {% endif %}
 
     <br />
 

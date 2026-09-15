@@ -75,3 +75,19 @@ class ChamadoRepository:
         session.refresh(chamado)
 
         return chamado
+
+    def atualizar_processos(
+            self,
+            session: Session,
+            chamado_id: int,
+            novos_processos: str
+    ):
+        chamado = self.buscar_por_id(session, chamado_id)
+
+        if not chamado:
+            return None
+
+        chamado.processos = novos_processos
+        session.commit()
+        session.refresh(chamado)
+        return chamado
