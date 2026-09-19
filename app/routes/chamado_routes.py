@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from app.database.connection import SessionLocal
 from app.repositories.chamado_repository import ChamadoRepository
 from app.services.chamado_service import ChamadoService
+from app.services.processo_service import ProcessoService
 
 from app.database.connection import SessionLocal
 from app.utils.decorators import login_required, permissao_required
@@ -96,6 +97,15 @@ def visualizar_chamado(chamado_id):
             usuario
         )
 
+        if chamado:
+            processo_service = ProcessoService()
+            processos = processo_service.listar_processos_por_chamado(
+                session_db,
+                chamado_id
+            )
+        else:
+            processos = []
+
     if erro == "nao_encontrado":
         return "Chamado não encontrado", 403
 
@@ -105,7 +115,8 @@ def visualizar_chamado(chamado_id):
     return render_template(
         "chamados/detalhes.html",
         chamado=chamado,
-        usuario=usuario
+        usuario=usuario,
+        processos=processos
     )
 
 @chamado_bp.route("/<int:chamado_id>/status", methods=["POST"])
@@ -138,19 +149,22 @@ def atualizar_status(chamado_id):
 @chamado_bp.route("/<int:chamado_id>/processos", methods=["POST"])
 @login_required
 @permissao_required("permissao_ti", "permissao_gerente")
-def atualizar_processos(chamado_id):
-    novos_processos = request.form["processos"]
+def registrar_processo(chamado_id):
+    descricao = request.form["processos"]
 
-    service = ChamadoService()
+    usuario = get_usuario_logado()
+
+    service = ProcessoService()
 
     with SessionLocal() as session_db:
-        chamado = service.atualizar_processos(
+        processo = service.criar_processo(
             session_db,
+            descricao,
             chamado_id,
-            novos_processos
+            usuario.id
         )
 
-    if not chamado:
-        return "Chamado não encontrado", 404
+    if not processo:
+        return "Erro ao registrar processo", 404
 
-    return redirect(url_for("chamados.visualizar_chamado", chamado_id=chamado.id))
+    return redirect(url_for("chamados.visualizar_chamado", chamado_id=chamado_id))

@@ -67,16 +67,40 @@
     {% if usuario.permissao_ti or usuario.permissao_gerente %}
       <h2>Registrar Processo</h2>
       <form method="POST"
-      action="{{ url_for('chamados.atualizar_processos', chamado_id = chamado.id) }}">
+      action="{{ url_for('chamados.registrar_processo', chamado_id = chamado.id) }}">
         <label for="processos">Processo realizado:</label>
         <br>
-        <textarea name="processos" id="processos" rows="6" required>{{ chamado.processos or "" }}</textarea>
+        <textarea name="processos" id="processos" rows="6" required>{{ "" }}</textarea>
         <br>
         <button type="submit">Registrar processo</button>
       </form>
     {% endif %}
 
     <br />
+
+    <h2>Histórico do atendimento</h2>
+
+    {% if processos %}
+      {% for processo in processos %}
+        <div>
+          <p>
+            <strong>
+              {{ processo.data.strftime('%H:%M - %d/%m/%Y') }}
+            </strong>
+          </p>
+
+          <p>
+            {{ processo.usuario.nome_usuario }}
+          </p>
+
+          <p>
+            {{ processo.descricao }}
+          </p>
+        </div>
+      {% endfor %}
+    {% else %}
+        <p>Nenhum processo registrado ainda.</p>
+    {% endif %}
 
     <a href="{{ url_for('chamados.listar_chamados') }}">
       Voltar para chamados

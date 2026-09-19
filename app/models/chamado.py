@@ -42,7 +42,7 @@ class Chamado(Base):
     )
 
     processos: Mapped[list["Processo"]] = relationship(
-        back_populates="chamados"
+        back_populates="chamado"
     )
 
     usuario: Mapped["Usuario"] = relationship(

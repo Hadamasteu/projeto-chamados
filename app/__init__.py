@@ -6,6 +6,7 @@ from app.database.connection import Base, engine
 
 from app.models.usuario import Usuario
 from app.models.chamado import Chamado
+from app.models.processo import Processo
 
 from app.routes.chamado_routes import chamado_bp
 from app.routes.auth_routes import auth_bp
