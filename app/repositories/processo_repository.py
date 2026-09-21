@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import select
 
 from app.models.processo import Processo
@@ -32,6 +32,7 @@ class ProcessoRepository:
     ):
         comando = (
             select(Processo)
+            .options(joinedload(Processo.usuario))
             .where(Processo.chamado_id == chamado_id)
             .order_by(Processo.data)
         )

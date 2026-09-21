@@ -150,19 +150,25 @@ def atualizar_status(chamado_id):
 @login_required
 @permissao_required("permissao_ti", "permissao_gerente")
 def registrar_processo(chamado_id):
-    descricao = request.form["processos"]
+    descricao = request.form.get("processos", "")
 
     usuario = get_usuario_logado()
 
     service = ProcessoService()
 
     with SessionLocal() as session_db:
-        processo = service.criar_processo(
+        processo, erro = service.criar_processo(
             session_db,
             descricao,
             chamado_id,
             usuario.id
         )
+
+    if erro == "chamado_nao_encontrado":
+        return "Chamado não encontrado", 404
+    
+    if erro == "descricao_invalida":
+        return "A descrição do processo não pode estar vazia", 400
 
     if not processo:
         return "Erro ao registrar processo", 404
