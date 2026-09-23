@@ -126,12 +126,14 @@ def atualizar_status(chamado_id):
     novo_status = request.form["status"]
 
     service = ChamadoService()
+    usuario = get_usuario_logado()
 
     with SessionLocal() as session_db:
         chamado, erro = service.atualizar_status(
             session_db,
             chamado_id,
-            novo_status
+            novo_status,
+            usuario.id
         )
     if erro == "status_invalido":
         return "Status inválido", 400
@@ -142,7 +144,7 @@ def atualizar_status(chamado_id):
     return redirect(
         url_for(
             "chamados.visualizar_chamado",
-            chamado_id=chamado.id
+            chamado_id=chamado_id
         )
     )
 

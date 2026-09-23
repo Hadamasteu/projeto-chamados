@@ -70,9 +70,8 @@ class ChamadoRepository:
             return None
 
         chamado.status = novo_status
-        session.commit()
 
-        session.refresh(chamado)
+        session.fluh()
 
         return chamado
 

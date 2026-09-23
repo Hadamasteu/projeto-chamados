@@ -20,8 +20,7 @@ class ProcessoRepository:
         )
 
         session.add(processo)
-        session.commit()
-        session.refresh(processo)
+        session.flush()
 
         return processo
 
